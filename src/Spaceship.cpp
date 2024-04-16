@@ -74,18 +74,23 @@ namespace nf {
 
 		for (int i = 0; i < mBullets.size(); i++) {
 			mBullets[i].update(deltaTime);
+			if (mBullets[i].getPosition().x + mBullets[i].getRadius() < 0 || mBullets[i].getPosition().x - mBullets[i].getRadius() > WindowWidth ||
+				mBullets[i].getPosition().y + mBullets[i].getRadius() < 0 || mBullets[i].getPosition().y - mBullets[i].getRadius() > WindowHeight) {
+				std::vector<Object>::iterator iter = mBullets.begin();
+				mBullets.erase(iter + i);
+				i--;
+			}
 		}
 	}
 
 	void Spaceship::boost(const sf::Time& deltaTime) {
-		mSpeed += nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized() * mBoost * deltaTime.asSeconds();
+		mSpeed += nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition) * mBoost * deltaTime.asSeconds();
 		if (std::abs(mSpeed.length()) > mMaxSpeed) {
 			mSpeed = mSpeed.normalized() * mMaxSpeed;
 		}
 	}
 
 	void Spaceship::shoot() {
-		mIsShooted = true;
 		Object bullet;
 		bullet.setup(mPosition, nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized() * mBulletSpeed, 
 			8.f, 1.f, "media/textures/bullet.png");

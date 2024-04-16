@@ -6,7 +6,7 @@ namespace nf {
 	class Spaceship : public Object {
 	protected:
 		float mMaxSpeed, mBoost, mBulletSpeed;
-		bool mIsBoosting = false, mIsShooted = false;
+		bool mIsBoosting = false;
 		sf::Keyboard::Key mBoostKey, mSpecialAbilityKey;
 		sf::Mouse::Button mAttackButton;
 		std::vector<Object> mBullets;

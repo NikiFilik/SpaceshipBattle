@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Vector2f.hpp"
+#include "globalConstsAndVars.hpp"
 
 namespace nf {
 	class Object {

@@ -1,13 +1,13 @@
 #include "Game.hpp"
 
-namespace nf {
-	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
+#include "globalConstsAndVars.hpp"
 
-	Game::Game(): mWindow(sf::VideoMode(1920, 1080), "Spaceship Battle", sf::Style::Fullscreen) {
+namespace nf {
+	Game::Game(): mWindow(sf::VideoMode(WindowWidth, WindowHeight), "Spaceship Battle", sf::Style::Fullscreen) {
 		mWindow.setVerticalSyncEnabled(true);
 
-		mSpaceship.setup(nf::Vector2f(960.f, 540.f), nf::Vector2f(0.f, 0.f), 48.f, 1, "media/textures/spaceship.png",
-			500.f, 1000.f, 1500.f, sf::Keyboard::W, sf::Mouse::Left, sf::Keyboard::Space);
+		mSpaceship.setup(SpaceshipStartPosition, SpaceshipStartSpeed, SpaceshipRadius, SpaceshipMass, SpaceshipTextureName,
+			SpaceshipMaxSpeed, SpaceshipBoost, SpaceshipBulletSpeed, SpaceshipBoostKey, SpaceshipAttackButton, SpaceshipSpecialAbilityKey);
 	}
 
 	void Game::run() {
