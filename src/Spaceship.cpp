@@ -1,4 +1,5 @@
 #include "Spaceship.hpp"
+#include <iostream>
 
 namespace nf {
 	void Spaceship::setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius, const float mass,
@@ -72,13 +73,15 @@ namespace nf {
 			mSprite.setRotation(std::acos(nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized().x) * (180.0 / 3.14159f));
 		}
 
-		for (int i = 0; i < mBullets.size(); i++) {
-			mBullets[i].update(deltaTime);
-			if (mBullets[i].getPosition().x + mBullets[i].getRadius() < 0 || mBullets[i].getPosition().x - mBullets[i].getRadius() > WindowWidth ||
-				mBullets[i].getPosition().y + mBullets[i].getRadius() < 0 || mBullets[i].getPosition().y - mBullets[i].getRadius() > WindowHeight) {
-				std::vector<Object>::iterator iter = mBullets.begin();
-				mBullets.erase(iter + i);
-				i--;
+		std::vector<Object>::iterator iter = mBullets.begin();
+		while (iter != mBullets.end()) {
+			(*iter).update(deltaTime);
+			if ((*iter).getPosition().x + (*iter).getRadius() < 0 || (*iter).getPosition().x - (*iter).getRadius() > WindowWidth ||
+				(*iter).getPosition().y + (*iter).getRadius() < 0 || (*iter).getPosition().y - (*iter).getRadius() > WindowHeight) {
+				iter = mBullets.erase(iter);
+			}
+			else {
+				iter++;
 			}
 		}
 	}

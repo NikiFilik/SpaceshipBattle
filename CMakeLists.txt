@@ -24,7 +24,7 @@ add_executable("${PROJECT_NAME}"
 	inc/Object.hpp src/Object.cpp
 	inc/Spaceship.hpp src/Spaceship.cpp
 	inc/Vector2f.hpp src/Vector2f.cpp
-	inc/globalConstsAndVars.hpp
+	inc/globalConstsAndVars.hpp 
 	inc/functions.hpp src/functions.cpp
 )
 

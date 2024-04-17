@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SFML/System.hpp"
+#include <SFML/System.hpp>
 
 namespace nf {
 	const int WindowWidth = 1920, WindowHeight = 1080;
@@ -10,7 +10,7 @@ namespace nf {
 	const nf::Vector2f SpaceshipStartSpeed(0.f, 0.f);
 	const float SpaceshipRadius = 48.f, SpaceshipMass = 1.f;
 	const std::string SpaceshipTextureName = "media/textures/spaceship.png";
-	const float SpaceshipMaxSpeed = 500.f, SpaceshipBoost = 0.5f, SpaceshipBulletSpeed =1500.f;
+	const float SpaceshipMaxSpeed = 500.f, SpaceshipBoost = 1.f, SpaceshipBulletSpeed = 1500.f;
 	const sf::Keyboard::Key SpaceshipBoostKey = sf::Keyboard::W, SpaceshipSpecialAbilityKey = sf::Keyboard::Space;
 	const sf::Mouse::Button SpaceshipAttackButton = sf::Mouse::Left;
 }
