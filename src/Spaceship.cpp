@@ -65,19 +65,28 @@ namespace nf {
 		if (mIsBoosting) {
 			boost(deltaTime);
 		}
-		Object::update(deltaTime);
-		if ((sf::Vector2f(sf::Mouse::getPosition()) - mPosition).y <= 0) {
-			mSprite.setRotation(std::acos(nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized().x) * (-180.0 / 3.14159f));
+		
+		if ((sf::Vector2f(sf::Mouse::getPosition()) - mPosition).y <= 0.f) {
+			mSprite.setRotation(std::acos(nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized().x) * (-180.f / 3.14159f));
 		}
 		else {
-			mSprite.setRotation(std::acos(nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized().x) * (180.0 / 3.14159f));
+			mSprite.setRotation(std::acos(nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized().x) * (180.f / 3.14159f));
 		}
+
+		if ((mPosition.x - mRadius < 0.f && mSpeed.x < 0.f) || (mPosition.x + mRadius > WindowWidth && mSpeed.x > 0.f)) {
+			mSpeed.x *= -0.3f;
+		}
+		if ((mPosition.y - mRadius < 0.f && mSpeed.y < 0.f) || (mPosition.y + mRadius > WindowHeight && mSpeed.y > 0.f)) {
+			mSpeed.y *= -0.3f;
+		}
+
+		Object::update(deltaTime);
 
 		std::vector<Object>::iterator iter = mBullets.begin();
 		while (iter != mBullets.end()) {
 			(*iter).update(deltaTime);
-			if ((*iter).getPosition().x + (*iter).getRadius() < 0 || (*iter).getPosition().x - (*iter).getRadius() > WindowWidth ||
-				(*iter).getPosition().y + (*iter).getRadius() < 0 || (*iter).getPosition().y - (*iter).getRadius() > WindowHeight) {
+			if ((*iter).getPosition().x + (*iter).getRadius() < 0.f || (*iter).getPosition().x - (*iter).getRadius() > WindowWidth ||
+				(*iter).getPosition().y + (*iter).getRadius() < 0.f || (*iter).getPosition().y - (*iter).getRadius() > WindowHeight) {
 				iter = mBullets.erase(iter);
 			}
 			else {

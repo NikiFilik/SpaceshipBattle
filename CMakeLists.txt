@@ -23,6 +23,7 @@ add_executable("${PROJECT_NAME}"
 	inc/Game.hpp src/Game.cpp
 	inc/Object.hpp src/Object.cpp
 	inc/Spaceship.hpp src/Spaceship.cpp
+	inc/TextureHolder.hpp src/TextureHolder.cpp
 	inc/Vector2f.hpp src/Vector2f.cpp
 	inc/globalConstsAndVars.hpp 
 	inc/functions.hpp src/functions.cpp
