@@ -3,13 +3,13 @@
 #include "functions.hpp"
 
 namespace nf {
-	void Object::setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius, const float mass, const std::string& textureName) {
+	void Object::setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius, const float mass, const sf::Texture* textureName) {
 		mPosition = position;
 		mSpeed = speed;
 		mRadius = radius;
 		mMass = mass;
-		mTexture.loadFromFile(textureName);
-		mSprite.setTexture(mTexture);
+		mTexture = textureName;
+		mSprite.setTexture(*mTexture);
 		mSprite.setOrigin(mRadius, mRadius);
 		mSprite.setPosition(mPosition);
 	}
@@ -30,9 +30,9 @@ namespace nf {
 	void Object::setSprite(const sf::Sprite& sprite) {
 		mSprite = sprite;
 	}
-	void Object::setTexture(const sf::Texture& texture) {
+	/*void Object::setTexture(const sf::Texture& texture) {
 		mTexture = texture;
-	}
+	}*/
 
 	const nf::Vector2f& Object::getPosition() const {
 		return mPosition;
@@ -49,9 +49,9 @@ namespace nf {
 	const sf::Sprite& Object::getSprite() const {
 		return mSprite;
 	}
-	const sf::Texture& Object::getTexture() const {
+	/*const sf::Texture& Object::getTexture() const {
 		return mTexture;
-	}
+	}*/
 
 	void Object::update(const sf::Time& deltaTime) {
 		mPosition += mSpeed * deltaTime.asSeconds();

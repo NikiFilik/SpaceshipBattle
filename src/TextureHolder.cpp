@@ -6,7 +6,8 @@ namespace nf {
 		texture.loadFromFile(filename);
 		mTextureMap[filename] = texture;
 	}
-	const sf::Texture& TextureHolder::get(const std::string& filename) const {
-		return mTextureMap.at(filename);
+	const sf::Texture* TextureHolder::get(const std::string& filename) const {
+		const sf::Texture* ptr = &mTextureMap.at(filename);
+		return ptr;
 	}
 }

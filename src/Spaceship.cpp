@@ -1,10 +1,9 @@
 #include "Spaceship.hpp"
-#include <iostream>
 
 namespace nf {
 	void Spaceship::setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius, const float mass,
-		const std::string& textureName, float maxSpeed, float boost, float bulletSpeed, 
-		const sf::Keyboard::Key& boostKey, const sf::Mouse::Button& attackButton, const sf::Keyboard::Key& specialAbilityKey) {
+		const sf::Texture* textureName, float maxSpeed, float boost, float bulletSpeed,
+		const sf::Keyboard::Key& boostKey, const sf::Mouse::Button& attackButton, const sf::Keyboard::Key& specialAbilityKey, const sf::Texture* bulletTextureName) {
 		Object::setup(position, speed, radius, mass, textureName);
 		mMaxSpeed = maxSpeed;
 		mBoost = boost;
@@ -12,6 +11,7 @@ namespace nf {
 		mBoostKey = boostKey;
 		mAttackButton = attackButton;
 		mSpecialAbilityKey = specialAbilityKey;
+		mBulletTexture = bulletTextureName;
 	}
 
 	void Spaceship::setMaxSpeed(const float maxSpeed) {
@@ -104,8 +104,9 @@ namespace nf {
 
 	void Spaceship::shoot() {
 		Object bullet;
-		bullet.setup(mPosition, nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized() * mBulletSpeed, 
-			8.f, 1.f, "media/textures/bullet.png");
 		mBullets.push_back(bullet);
+
+		mBullets.back().setup(mPosition, nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized() * mBulletSpeed,
+			8.f, 1.f, mBulletTexture);
 	}
 }

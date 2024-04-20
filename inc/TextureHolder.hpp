@@ -10,6 +10,6 @@ namespace nf {
 		std::map<std::string, sf::Texture> mTextureMap;
 	public:
 		void load(const std::string& filename);
-		const sf::Texture& get(const std::string& filename) const;
+		const sf::Texture* get(const std::string& filename) const;
 	};
 }

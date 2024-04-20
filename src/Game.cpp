@@ -3,23 +3,33 @@
 #include "globalConstsAndVars.hpp"
 
 namespace nf {
-	Game::Game(): mWindow(sf::VideoMode(WindowWidth, WindowHeight), "Spaceship Battle", sf::Style::Fullscreen) {
+	Game::Game(): mWindow(sf::VideoMode(WindowWidth, WindowHeight), "Spaceship Battle", sf::Style::Fullscreen)
+	{
 		mWindow.setVerticalSyncEnabled(true);
 
-		mSpaceship.setup(SpaceshipStartPosition, SpaceshipStartSpeed, SpaceshipRadius, SpaceshipMass, SpaceshipTextureName,
-			SpaceshipMaxSpeed, SpaceshipBoost, SpaceshipBulletSpeed, SpaceshipBoostKey, SpaceshipAttackButton, SpaceshipSpecialAbilityKey);
+		mTextureHolder.load(SpaceshipTextureName);
+		mTextureHolder.load(SpaceshipBulletTextureName);
+
+		mSpaceship.setup(SpaceshipStartPosition, SpaceshipStartSpeed, SpaceshipRadius, SpaceshipMass, mTextureHolder.get(SpaceshipTextureName),
+			SpaceshipMaxSpeed, SpaceshipBoost, SpaceshipBulletSpeed, SpaceshipBoostKey, SpaceshipAttackButton, SpaceshipSpecialAbilityKey, mTextureHolder.get(SpaceshipBulletTextureName));
 	}
 
 	void Game::run() {
 		sf::Clock clock;
 		sf::Time timeSinceLastUpdate = sf::Time::Zero;
 		sf::Time timeSinceLastFrame = sf::Time::Zero;
+		sf::Time timeSinceLastEnemySpawn = sf::Time::Zero;
 
 		while (mWindow.isOpen()){
 			timeSinceLastUpdate = clock.restart();
 			timeSinceLastFrame += timeSinceLastUpdate;
+			timeSinceLastEnemySpawn += timeSinceLastUpdate;
 
 			processInput();
+
+			if (timeSinceLastEnemySpawn >= TimePerSpawn) {
+
+			}
 
 			update(timeSinceLastUpdate);
 
@@ -70,10 +80,12 @@ namespace nf {
 
 	void Game::render() {
 		mWindow.clear();
-		mWindow.draw(mSpaceship.getSprite());
+		
 		for (int i = 0; i < mSpaceship.getBullets().size(); i++) {
 			mWindow.draw(mSpaceship.getBullets()[i].getSprite());
 		}
+		mWindow.draw(mSpaceship.getSprite());
+
 		mWindow.display();
 	}
 }

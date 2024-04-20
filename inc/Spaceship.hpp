@@ -10,10 +10,11 @@ namespace nf {
 		sf::Keyboard::Key mBoostKey, mSpecialAbilityKey;
 		sf::Mouse::Button mAttackButton;
 		std::vector<Object> mBullets;
+		const sf::Texture* mBulletTexture;
 	public:
 		void setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius, const float mass, 
-			const std::string& textureName, float maxSpeed, float boost, float bulletSpeed, 
-			const sf::Keyboard::Key& boostKey, const sf::Mouse::Button& attackButton, const sf::Keyboard::Key& specialAbilityKey);
+			const sf::Texture* textureName, float maxSpeed, float boost, float bulletSpeed, 
+			const sf::Keyboard::Key& boostKey, const sf::Mouse::Button& attackButton, const sf::Keyboard::Key& specialAbilityKey, const sf::Texture* bulletTextureName);
 
 		void setMaxSpeed(const float maxSpeed);
 		void setBoost(const float boost);
