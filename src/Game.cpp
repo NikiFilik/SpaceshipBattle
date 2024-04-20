@@ -9,6 +9,7 @@ namespace nf {
 
 		mTextureHolder.load(SpaceshipTextureName);
 		mTextureHolder.load(SpaceshipBulletTextureName);
+		mTextureHolder.load(EnemyTextureName);
 
 		mSpaceship.setup(SpaceshipStartPosition, SpaceshipStartSpeed, SpaceshipRadius, SpaceshipMass, mTextureHolder.get(SpaceshipTextureName),
 			SpaceshipMaxSpeed, SpaceshipBoost, SpaceshipBulletSpeed, SpaceshipBoostKey, SpaceshipAttackButton, SpaceshipSpecialAbilityKey, mTextureHolder.get(SpaceshipBulletTextureName));
@@ -18,7 +19,7 @@ namespace nf {
 		sf::Clock clock;
 		sf::Time timeSinceLastUpdate = sf::Time::Zero;
 		sf::Time timeSinceLastFrame = sf::Time::Zero;
-		sf::Time timeSinceLastEnemySpawn = sf::Time::Zero;
+		sf::Time timeSinceLastEnemySpawn = sf::seconds(9.f);
 
 		while (mWindow.isOpen()){
 			timeSinceLastUpdate = clock.restart();
@@ -28,7 +29,11 @@ namespace nf {
 			processInput();
 
 			if (timeSinceLastEnemySpawn >= TimePerSpawn) {
-
+				timeSinceLastEnemySpawn = sf::Time::Zero;
+				nf::Enemy enemy;
+				//ÑÄÅËÀÒÜ ÍÎÐÌÀËÜÍÛÉ ÑÅÒÀÏ
+				enemy.setup(SpaceshipStartPosition, nf::Vector2f(rand()%200 - 100, rand()%200 - 100), SpaceshipRadius, SpaceshipMass, mTextureHolder.get(EnemyTextureName));
+				mEnemies.push_back(enemy);
 			}
 
 			update(timeSinceLastUpdate);
@@ -75,12 +80,41 @@ namespace nf {
 	}
 
 	void Game::update(const sf::Time& deltaTime) {
+		auto bulletIter = mSpaceship.getBullets().begin();
+		auto enemyIter = mEnemies.begin();
+		bool killed = false;
+		while (enemyIter != mEnemies.end()) {
+			bulletIter = mSpaceship.getBullets().begin();
+			killed = false;
+			while (bulletIter != mSpaceship.getBullets().end()) {
+				if (enemyIter->isColliding(*bulletIter)) {
+					enemyIter = mEnemies.erase(enemyIter);
+					bulletIter = mSpaceship.getBullets().erase(bulletIter);
+					killed = true;
+					break;
+				}
+				else {
+					++bulletIter;
+				}
+			}
+			if (!killed) {
+				++enemyIter;
+			}
+		}
+
+
 		mSpaceship.update(deltaTime);
+		for (int i = 0; i < mEnemies.size(); i++) {
+			mEnemies[i].update(deltaTime);
+		}
 	}
 
 	void Game::render() {
 		mWindow.clear();
 		
+		for (int i = 0; i < mEnemies.size(); i++) {
+			mWindow.draw(mEnemies[i].getSprite());
+		}
 		for (int i = 0; i < mSpaceship.getBullets().size(); i++) {
 			mWindow.draw(mSpaceship.getBullets()[i].getSprite());
 		}

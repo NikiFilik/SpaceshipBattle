@@ -90,7 +90,7 @@ namespace nf {
 				iter = mBullets.erase(iter);
 			}
 			else {
-				iter++;
+				++iter;
 			}
 		}
 	}
