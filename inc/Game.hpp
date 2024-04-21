@@ -14,11 +14,13 @@ namespace nf {
 		nf::Spaceship mSpaceship;
 		nf::TextureHolder mTextureHolder;
 		std::vector<nf::Enemy> mEnemies;
+		sf::Sprite mBackground;
 	private:
 		void processInput();
 		void processPlayerInput(const sf::Keyboard::Key& key, const bool isPressed);
 		void processPlayerInput(const sf::Mouse::Button& button, const bool isPressed);
 
+		void enemySpawn();
 		void update(const sf::Time& deltaTime);
 
 		void render();

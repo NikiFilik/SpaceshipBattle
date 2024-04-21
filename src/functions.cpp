@@ -9,4 +9,8 @@ namespace nf {
 		newSpeed1 = (speed1 * (mass1 - mass2) + 2 * mass2 * speed2) / (mass1 + mass2);
 		newSpeed2 = (speed2 * (mass2 - mass1) + 2 * mass1 * speed1) / (mass1 + mass2);
 	}
+
+	int randIntFromRange(const int a, const int b) {
+		return rand() % (b - a + 1) + a;
+	}
 }
