@@ -6,10 +6,11 @@
 #include "Spaceship.hpp"
 #include "TextureHolder.hpp"
 #include "Enemy.hpp"
+#include "Asteroid.hpp"
 
 namespace nf {
 	class Game {
-	private:
+	public:
 		sf::RenderWindow mWindow;
 		nf::Spaceship mSpaceship;
 		nf::TextureHolder mTextureHolder;

@@ -26,6 +26,9 @@ namespace nf {
 	void Spaceship::setIsBoosting(const bool isBoosting) {
 		mIsBoosting = isBoosting;
 	}
+	void Spaceship::setIsKilled(const bool isKilled) {
+		mIsKilled = isKilled;
+	}
 	void Spaceship::setBoostKey(const sf::Keyboard::Key& boostKey) {
 		mBoostKey = boostKey;
 	}
@@ -48,6 +51,9 @@ namespace nf {
 	const bool Spaceship::getIsBoosting() const {
 		return mIsBoosting;
 	}
+	const bool Spaceship::getIsKilled() const {
+		return mIsKilled;
+	}
 	const sf::Keyboard::Key& Spaceship::getBoostKey() const {
 		return mBoostKey;
 	}
@@ -62,10 +68,10 @@ namespace nf {
 	}
 
 	void Spaceship::update(const sf::Time& deltaTime) {
-		if (mIsBoosting) {
+		if (mIsBoosting && !mIsKilled) {
 			boost(deltaTime);
 		}
-		
+
 		if ((sf::Vector2f(sf::Mouse::getPosition()) - mPosition).y <= 0.f) {
 			mSprite.setRotation(std::acos(nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized().x) * (-180.f / 3.14159f));
 		}

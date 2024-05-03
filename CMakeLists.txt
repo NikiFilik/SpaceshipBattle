@@ -24,6 +24,7 @@ add_executable("${PROJECT_NAME}"
 	inc/Object.hpp src/Object.cpp
 	inc/Spaceship.hpp src/Spaceship.cpp
 	inc/Enemy.hpp src/Enemy.cpp
+	inc/Asteroid.hpp src/Asteroid.cpp
 	inc/TextureHolder.hpp src/TextureHolder.cpp
 	inc/Vector2f.hpp src/Vector2f.cpp
 	inc/globalConstsAndVars.hpp 

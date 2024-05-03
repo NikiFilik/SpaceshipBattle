@@ -11,6 +11,7 @@ namespace nf {
 		sf::Mouse::Button mAttackButton;
 		std::vector<Object> mBullets;
 		const sf::Texture* mBulletTexture;
+		bool mIsKilled = false;
 	public:
 		void setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius, const float mass, 
 			const sf::Texture* textureName, float maxSpeed, float boost, float bulletSpeed, 
@@ -20,6 +21,7 @@ namespace nf {
 		void setBoost(const float boost);
 		void setBulletSpeed(const float bulletSpeed);
 		void setIsBoosting(const bool isBoosting);
+		void setIsKilled(const bool isKilled);
 		void setBoostKey(const sf::Keyboard::Key& boostKey);
 		void setAttackButton(const sf::Mouse::Button& attackButton);
 		void setSpecialAbilityKey(const sf::Keyboard::Key& specialAbilityKey);
@@ -28,6 +30,7 @@ namespace nf {
 		const float getBoost() const;
 		const float getBulletSpeed() const;
 		const bool getIsBoosting() const;
+		const bool getIsKilled() const;
 		const sf::Keyboard::Key& getBoostKey() const;
 		virtual const sf::Mouse::Button& getAttackButton() const;
 		virtual const sf::Keyboard::Key& getSpecialAbilityKey() const;

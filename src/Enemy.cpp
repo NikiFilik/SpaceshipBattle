@@ -1,5 +1,7 @@
 #include "Enemy.hpp"
 
+#include <iostream>
+
 namespace nf {
 	void Enemy::setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius,
 		const float mass, const sf::Texture* textureName, const float rotationSpeed) {
@@ -18,5 +20,8 @@ namespace nf {
 			mWasOnScreen = true;
 		}
 		Object::update(deltaTime);
+	}
+
+	void Enemy::specialAbility(nf::Game& game) {
 	}
 }

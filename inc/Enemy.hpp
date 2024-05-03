@@ -3,6 +3,8 @@
 #include "Object.hpp"
 
 namespace nf {
+	class Game;
+
 	class Enemy : public Object {
 	protected:
 		bool mWasOnScreen = false;
@@ -14,5 +16,7 @@ namespace nf {
 		const bool getWasOnScreen() const;
 
 		virtual void update(const sf::Time& deltaTime) override;
+
+		virtual void specialAbility(nf::Game& game);
 	};
 }
