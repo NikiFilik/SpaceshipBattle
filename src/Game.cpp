@@ -19,13 +19,32 @@ namespace nf {
 			miniSpeed2 = mSpeed + nf::Vector2f(cos((mSprite.getRotation() + 120.f) * (3.14159f / 180.f)), sin((mSprite.getRotation() + 120.f) * (3.14159f / 180.f))) * 100.f,
 			miniSpeed3 = mSpeed + nf::Vector2f(cos((mSprite.getRotation() - 120.f) * (3.14159f / 180.f)), sin((mSprite.getRotation() - 120.f) * (3.14159f / 180.f))) * 100.f;
 
-		miniEnemy1->setup(miniPosition1, miniSpeed1, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
-		miniEnemy2->setup(miniPosition2, miniSpeed2, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
-		miniEnemy3->setup(miniPosition3, miniSpeed3, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
+		miniEnemy1->setup(nf::EnemyType::Base, miniPosition1, miniSpeed1, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
+		miniEnemy2->setup(nf::EnemyType::Base, miniPosition2, miniSpeed2, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
+		miniEnemy3->setup(nf::EnemyType::Base, miniPosition3, miniSpeed3, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
 
 		game.mEnemies.push_back(miniEnemy1);
 		game.mEnemies.push_back(miniEnemy2);
 		game.mEnemies.push_back(miniEnemy3);
+	}
+
+	void UFO::specialAbility(nf::Game& game) {
+		float A, B, C, D, t;
+		A = std::pow(game.mSpaceship.getPosition().x, 2) * std::pow(game.mSpaceship.getSpeed().x, 2) +
+			std::pow(game.mSpaceship.getPosition().y, 2) * std::pow(game.mSpaceship.getSpeed().y, 2) - std::pow(UFOBulletSpeed, 2);
+		B = -2.f * (game.mSpaceship.getPosition().x * game.mSpaceship.getSpeed().x * mPosition.x + game.mSpaceship.getPosition().y * game.mSpaceship.getSpeed().y * mPosition.y);
+		C = std::pow(mPosition.x, 2) + std::pow(mPosition.y, 2);
+
+		D = B * B - 4.f * A * C;
+
+		t = (-B + std::sqrt(D)) / (2 * A);
+
+		nf::Vector2f target(game.mSpaceship.getPosition() + game.mSpaceship.getSpeed() * t);
+		nf::Vector2f bulletSpeed((nf::Vector2f(target - mPosition)).normalized() * UFOBulletSpeed);
+
+		nf::Enemy bullet;
+		bullet.setup(nf::EnemyType::Base, mPosition, bulletSpeed, UFOBulletRadius, UFOBulletMass, mBulletTexture, 0.f);
+		mBullets.push_back(bullet);
 	}
 
 	Game::Game(): mWindow(sf::VideoMode(WindowWidth, WindowHeight), "Spaceship Battle", sf::Style::Fullscreen)
@@ -134,7 +153,7 @@ namespace nf {
 			asteroidSpeed.normalize();
 			asteroidSpeed *= float(randIntFromRange(AsteroidMinSpawnSpeed, AsteroidMaxSpawnSpeed));
 
-			asteroid->setup(asteroidSpawn, asteroidSpeed, AsteroidRadius, AsteroidMass,
+			asteroid->setup(nf::EnemyType::Asteroid, asteroidSpawn, asteroidSpeed, AsteroidRadius, AsteroidMass,
 				mTextureHolder.get(AsteroidTextureName), nf::randIntFromRange(-60, 60), mTextureHolder.get(MiniAsteroidTextureName));
 
 			bool isColliding = false;
@@ -163,7 +182,11 @@ namespace nf {
 			killed = false;
 			for (bInd = 0; bInd < mSpaceship.getBullets().size();) {
 				if ((mEnemies[eInd])->isColliding(mSpaceship.getBullets()[bInd])) {
-					mEnemies[eInd]->specialAbility(*this);
+
+					if (mEnemies[eInd]->getEnemyType() == nf::EnemyType::Asteroid) {
+						mEnemies[eInd]->specialAbility(*this);
+					}
+
 					auto iter = mEnemies.begin() + eInd;
 					iter = mEnemies.erase(iter);
 					auto iter2 = mSpaceship.getBullets().begin() + bInd;
@@ -227,6 +250,11 @@ namespace nf {
 		mWindow.draw(mBackground);
 		for (int i = 0; i < mEnemies.size(); ++i) {
 			mWindow.draw(mEnemies[i]->getSprite());
+			if (mEnemies[i]->getEnemyType() == nf::EnemyType::UFO) {
+				for (int j = 0; j < mEnemies[i]->getBullets().size(); ++j) {
+					mWindow.draw(((mEnemies[i]->getBullets())[j]).getSprite());
+				}
+			}
 		}
 		for (int i = 0; i < mSpaceship.getBullets().size(); ++i) {
 			mWindow.draw(mSpaceship.getBullets()[i].getSprite());

@@ -3,12 +3,16 @@
 #include <iostream>
 
 namespace nf {
-	void Enemy::setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius,
+	void Enemy::setup(nf::EnemyType type, const nf::Vector2f& position, const nf::Vector2f& speed, const float radius,
 		const float mass, const sf::Texture* textureName, const float rotationSpeed) {
+		mType = type;
 		Object::setup(position, speed, radius, mass, textureName);
 		mRotationSpeed = rotationSpeed;
 	}
 
+	nf::EnemyType Enemy::getEnemyType() const {
+		return mType;
+	}
 	const bool Enemy::getWasOnScreen() const {
 		return mWasOnScreen;
 	}

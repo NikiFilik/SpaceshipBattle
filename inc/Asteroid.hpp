@@ -7,7 +7,7 @@ namespace nf {
 	protected:
 		const sf::Texture* mMiniTexture;
 	public:
-		void setup(const nf::Vector2f& position, const nf::Vector2f& speed, const float radius,
+		void setup(nf::EnemyType type, const nf::Vector2f& position, const nf::Vector2f& speed, const float radius,
 			const float mass, const sf::Texture* textureName, const float rotationSpeed, const sf::Texture* miniTexture);
 
 		void specialAbility(nf::Game& game) override;

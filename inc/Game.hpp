@@ -7,8 +7,7 @@
 #include "TextureHolder.hpp"
 #include "Enemy.hpp"
 #include "Asteroid.hpp"
-
-#include <memory>
+#include "UFO.hpp"
 
 namespace nf {
 	class Game {
