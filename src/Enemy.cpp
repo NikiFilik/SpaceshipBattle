@@ -23,5 +23,6 @@ namespace nf {
 	}
 
 	void Enemy::specialAbility(nf::Game& game) {
+
 	}
 }

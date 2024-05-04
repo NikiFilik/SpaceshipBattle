@@ -3,31 +3,29 @@
 #include "globalConstsAndVars.hpp"
 #include "functions.hpp"
 
-#include <iostream>
-
 namespace nf {
 	void Asteroid::specialAbility(nf::Game& game) {
-		nf::Enemy miniEnemy1, miniEnemy2, miniEnemy3;
+		std::shared_ptr<nf::Enemy> miniEnemy1 = std::make_shared<nf::Enemy>();
+		std::shared_ptr<nf::Enemy> miniEnemy2 = std::make_shared<nf::Enemy>();
+		std::shared_ptr<nf::Enemy> miniEnemy3 = std::make_shared<nf::Enemy>();
 
 		float distanceFromCentre = 2.f * MiniAsteroidRadius / std::sqrt(3.f);
 
-		nf::Vector2f miniPosition1 = mPosition + nf::Vector2f(cos(distanceFromCentre * mSprite.getRotation() * (3.14159f / 180.f)), sin(distanceFromCentre * mSprite.getRotation() * (3.14159f / 180.f))),
-			miniPosition2 = mPosition + nf::Vector2f(cos(distanceFromCentre * (mSprite.getRotation() + 120.f) * (3.14159f / 180.f)), sin(distanceFromCentre * (mSprite.getRotation() + 120.f) * (3.14159f / 180.f))),
-			miniPosition3 = mPosition + nf::Vector2f(cos(distanceFromCentre * (mSprite.getRotation() - 120.f) * (3.14159f / 180.f)), sin(distanceFromCentre * (mSprite.getRotation() - 120.f) * (3.14159f / 180.f)));
+		nf::Vector2f miniPosition1 = mPosition + nf::Vector2f(distanceFromCentre * cos(mSprite.getRotation() * (3.14159f / 180.f)), distanceFromCentre * sin(mSprite.getRotation() * (3.14159f / 180.f))),
+			miniPosition2 = mPosition + nf::Vector2f(distanceFromCentre * cos((mSprite.getRotation() + 120.f) * (3.14159f / 180.f)), distanceFromCentre * sin((mSprite.getRotation() + 120.f) * (3.14159f / 180.f))),
+			miniPosition3 = mPosition + nf::Vector2f(distanceFromCentre * cos((mSprite.getRotation() - 120.f) * (3.14159f / 180.f)), distanceFromCentre * sin((mSprite.getRotation() - 120.f) * (3.14159f / 180.f)));
 
-		nf::Vector2f miniSpeed1 = mSpeed + nf::Vector2f(cos(distanceFromCentre * mSprite.getRotation() * (3.14159f / 180.f)), sin(distanceFromCentre * mSprite.getRotation() * (3.14159f / 180.f))) * 10.f,
-			miniSpeed2 = mSpeed + nf::Vector2f(cos(distanceFromCentre * (mSprite.getRotation() + 120.f) * (3.14159f / 180.f)), sin(distanceFromCentre * (mSprite.getRotation() + 120.f) * (3.14159f / 180.f))) * 10.f,
-			miniSpeed3 = mSpeed + nf::Vector2f(cos(distanceFromCentre * (mSprite.getRotation() - 120.f) * (3.14159f / 180.f)), sin(distanceFromCentre * (mSprite.getRotation() - 120.f) * (3.14159f / 180.f))) * 10.f;
+		nf::Vector2f miniSpeed1 = mSpeed + nf::Vector2f(cos(mSprite.getRotation() * (3.14159f / 180.f)), sin(mSprite.getRotation() * (3.14159f / 180.f))) * 100.f,
+			miniSpeed2 = mSpeed + nf::Vector2f(cos((mSprite.getRotation() + 120.f) * (3.14159f / 180.f)), sin((mSprite.getRotation() + 120.f) * (3.14159f / 180.f))) * 100.f,
+			miniSpeed3 = mSpeed + nf::Vector2f(cos((mSprite.getRotation() - 120.f) * (3.14159f / 180.f)), sin((mSprite.getRotation() - 120.f) * (3.14159f / 180.f))) * 100.f;
 
-		miniEnemy1.setup(miniPosition1, miniSpeed1, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
-		miniEnemy2.setup(miniPosition2, miniSpeed2, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
-		miniEnemy3.setup(miniPosition3, miniSpeed3, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
+		miniEnemy1->setup(miniPosition1, miniSpeed1, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
+		miniEnemy2->setup(miniPosition2, miniSpeed2, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
+		miniEnemy3->setup(miniPosition3, miniSpeed3, MiniAsteroidRadius, MiniAsteroidMass, mMiniTexture, nf::randIntFromRange(-60, 60));
 
 		game.mEnemies.push_back(miniEnemy1);
 		game.mEnemies.push_back(miniEnemy2);
 		game.mEnemies.push_back(miniEnemy3);
-
-		std::cout << "pipa";
 	}
 
 	Game::Game(): mWindow(sf::VideoMode(WindowWidth, WindowHeight), "Spaceship Battle", sf::Style::Fullscreen)
@@ -113,7 +111,7 @@ namespace nf {
 		bool spawned = false;
 		int attemptCounter = 0;
 		while ((!spawned) && attemptCounter < 10) {
-			nf::Asteroid asteroid;
+			std::shared_ptr<nf::Enemy> asteroid = std::make_shared<nf::Asteroid>();
 			int spawnX, spawnY, side = nf::randIntFromRange(1, 4);
 			if (side == 1) {
 				spawnX = randIntFromRange(-AsteroidRadius, WindowWidth + AsteroidRadius);
@@ -136,14 +134,14 @@ namespace nf {
 			asteroidSpeed.normalize();
 			asteroidSpeed *= float(randIntFromRange(AsteroidMinSpawnSpeed, AsteroidMaxSpawnSpeed));
 
-			asteroid.setup(asteroidSpawn, asteroidSpeed, AsteroidRadius, AsteroidMass,
+			asteroid->setup(asteroidSpawn, asteroidSpeed, AsteroidRadius, AsteroidMass,
 				mTextureHolder.get(AsteroidTextureName), nf::randIntFromRange(-60, 60), mTextureHolder.get(MiniAsteroidTextureName));
 
 			bool isColliding = false;
 
 			auto iter = mEnemies.begin();
 			while (iter != mEnemies.end()) {
-				if (asteroid.isColliding(*iter)) {
+				if (asteroid->isColliding(*(*iter))) {
 					isColliding = true;
 					break;
 				}
@@ -158,39 +156,38 @@ namespace nf {
 	}
 
 	void Game::update(const sf::Time& deltaTime) {
-		auto bulletIter = mSpaceship.getBullets().begin();
-		auto enemyIter = mEnemies.begin();
+		int bInd = 0;
 		bool killed = false;
-		while (enemyIter != mEnemies.end()) {
-			bulletIter = mSpaceship.getBullets().begin();
+		for (int eInd = 0; eInd < mEnemies.size();) {
+			bInd = 0;
 			killed = false;
-			while (bulletIter != mSpaceship.getBullets().end()) {
-				if (enemyIter->isColliding(*bulletIter)) {
-					/*FFFFF*/
-					enemyIter->specialAbility(*this);
-					/*FFFFF*/
-					enemyIter = mEnemies.erase(enemyIter);
-					bulletIter = mSpaceship.getBullets().erase(bulletIter);
+			for (bInd = 0; bInd < mSpaceship.getBullets().size();) {
+				if ((mEnemies[eInd])->isColliding(mSpaceship.getBullets()[bInd])) {
+					mEnemies[eInd]->specialAbility(*this);
+					auto iter = mEnemies.begin() + eInd;
+					iter = mEnemies.erase(iter);
+					auto iter2 = mSpaceship.getBullets().begin() + bInd;
+					iter2 = mSpaceship.getBullets().erase(iter2);
 					killed = true;
 					break;
 				}
 				else {
-					++bulletIter;
+					++bInd;
 				}
 			}
 			if (!killed) {
-				++enemyIter;
+				++eInd;
 			}
 		}
 
 		for (int i = 0; i < mEnemies.size(); ++i) {
-			if (mSpaceship.isColliding(mEnemies[i])) {
+			if (mSpaceship.isColliding(*(mEnemies[i]))) {
 				mSpaceship.setIsKilled(true);
-				mSpaceship.resolveCollision(mEnemies[i]);
+				mSpaceship.resolveCollision(*(mEnemies[i]));
 			}
 			for (int j = i + 1; j < mEnemies.size(); ++j) {
-				if (mEnemies[i].isColliding(mEnemies[j])) {
-					mEnemies[i].resolveCollision(mEnemies[j]);
+				if (mEnemies[i]->isColliding(*(mEnemies[j]))) {
+					mEnemies[i]->resolveCollision(*(mEnemies[j]));
 				}
 			}
 		}
@@ -209,13 +206,13 @@ namespace nf {
 
 		mSpaceship.update(deltaTime);
 
-		std::vector<Enemy>::iterator iter = mEnemies.begin();
+		auto iter = mEnemies.begin();
 		while (iter != mEnemies.end()) {
-			(*iter).update(deltaTime);
-			if ((((*iter).getPosition().x + (*iter).getRadius() < 0.f || (*iter).getPosition().x - (*iter).getRadius() > WindowWidth ||
-				(*iter).getPosition().y + (*iter).getRadius() < 0.f || (*iter).getPosition().y - (*iter).getRadius() > WindowHeight) && (*iter).getWasOnScreen()) || 
-				((*iter).getPosition().x < 0.f - 500.f || (*iter).getPosition().x > WindowWidth + 500.f ||
-					(*iter).getPosition().y < 0.f - 500.f || (*iter).getPosition().y > WindowHeight + 500.f)) {
+			(*iter)->update(deltaTime);
+			if ((((*iter)->getPosition().x + (*iter)->getRadius() < 0.f || (*iter)->getPosition().x - (*iter)->getRadius() > WindowWidth ||
+				(*iter)->getPosition().y + (*iter)->getRadius() < 0.f || (*iter)->getPosition().y - (*iter)->getRadius() > WindowHeight) && (*iter)->getWasOnScreen()) || 
+				((*iter)->getPosition().x < 0.f - 500.f || (*iter)->getPosition().x > WindowWidth + 500.f ||
+					(*iter)->getPosition().y < 0.f - 500.f || (*iter)->getPosition().y > WindowHeight + 500.f)) {
 				iter = mEnemies.erase(iter);
 			}
 			else {
@@ -229,7 +226,7 @@ namespace nf {
 		
 		mWindow.draw(mBackground);
 		for (int i = 0; i < mEnemies.size(); ++i) {
-			mWindow.draw(mEnemies[i].getSprite());
+			mWindow.draw(mEnemies[i]->getSprite());
 		}
 		for (int i = 0; i < mSpaceship.getBullets().size(); ++i) {
 			mWindow.draw(mSpaceship.getBullets()[i].getSprite());

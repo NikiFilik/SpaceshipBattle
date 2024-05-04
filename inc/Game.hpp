@@ -8,13 +8,15 @@
 #include "Enemy.hpp"
 #include "Asteroid.hpp"
 
+#include <memory>
+
 namespace nf {
 	class Game {
 	public:
 		sf::RenderWindow mWindow;
 		nf::Spaceship mSpaceship;
 		nf::TextureHolder mTextureHolder;
-		std::vector<nf::Enemy> mEnemies;
+		std::vector<std::shared_ptr<nf::Enemy>> mEnemies;
 		sf::Sprite mBackground;
 	private:
 		void processInput();

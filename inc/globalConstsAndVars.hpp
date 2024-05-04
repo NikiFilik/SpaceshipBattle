@@ -5,7 +5,7 @@
 
 namespace nf {
 	const int WindowWidth = 1920, WindowHeight = 1080;
-	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f), TimePerSpawn = sf::seconds(0.5f);
+	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f), TimePerSpawn = sf::seconds(3.f);
 	const std::string BackgroundTextureName = "media/textures/background.png";
 
 	const nf::Vector2f SpaceshipStartPosition(960.f, 540.f);
