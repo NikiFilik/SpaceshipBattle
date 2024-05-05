@@ -13,4 +13,20 @@ namespace nf {
 	std::vector<Enemy>& UFO::getBullets() {
 		return mBullets;
 	}
+
+	void UFO::update(const sf::Time& deltaTime) {
+		Enemy::update(deltaTime);
+
+		auto iter = mBullets.begin();
+		while (iter != mBullets.end()) {
+			(*iter).update(deltaTime);
+			if ((*iter).getPosition().x + (*iter).getRadius() < 0.f || (*iter).getPosition().x - (*iter).getRadius() > WindowWidth ||
+				(*iter).getPosition().y + (*iter).getRadius() < 0.f || (*iter).getPosition().y - (*iter).getRadius() > WindowHeight) {
+				iter = mBullets.erase(iter);
+			}
+			else {
+				++iter;
+			}
+		}
+	}
 }

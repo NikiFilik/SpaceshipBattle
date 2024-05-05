@@ -5,7 +5,7 @@
 
 namespace nf {
 	const int WindowWidth = 1920, WindowHeight = 1080;
-	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f), TimePerSpawn = sf::seconds(2.f);
+	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f), TimePerSpawn = sf::seconds(1.f), TimePerAttack = sf::seconds(2.f);
 	const std::string BackgroundTextureName = "media/textures/background.png";
 
 	const nf::Vector2f SpaceshipStartPosition(960.f, 540.f);
@@ -24,8 +24,8 @@ namespace nf {
 	const float AsteroidRadius = 64.f, AsteroidMass = 3.f, MiniAsteroidRadius = 28.f, MiniAsteroidMass = 1.f;
 	const float AsteroidMinSpawnSpeed = 100.f, AsteroidMaxSpawnSpeed = 200.f;
 
-	const std::string UFOTextureName = "media/texture/ufo.png", UFOBulletTextureName = "media/textures/ufoBullet.png";
-	const float UFORadius = 64.f, UFOMass = 6.f, UFOBulletSpeed = 1000.f, UFOBulletRadius = 12.f, UFOBulletMass = 1.f;
+	const std::string UFOTextureName = "media/textures/ufo.png", UFOBulletTextureName = "media/textures/ufoBullet.png";
+	const float UFORadius = 64.f, UFOMass = 6.f, UFOBulletSpeed = 700.f, UFOBulletRadius = 12.f, UFOBulletMass = 1.f;
 	const float UFOMinSpawnSpeed = 100.f, UFOMaxSpawnSpeed = 200.f;
 
 	enum class EnemyType {Base, Asteroid, UFO};

@@ -13,6 +13,8 @@ namespace nf {
 
 		std::vector<Enemy>& getBullets() override;
 
+		void update(const sf::Time& deltaTime) override;
+
 		void specialAbility(nf::Game& game) override;
 	};
 }

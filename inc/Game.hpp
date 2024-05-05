@@ -23,6 +23,7 @@ namespace nf {
 		void processPlayerInput(const sf::Mouse::Button& button, const bool isPressed);
 
 		void enemySpawn();
+		void enemyAttack();
 		void update(const sf::Time& deltaTime);
 
 		void render();
