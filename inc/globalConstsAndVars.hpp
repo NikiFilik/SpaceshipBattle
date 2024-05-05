@@ -10,7 +10,7 @@ namespace nf {
 
 	const nf::Vector2f SpaceshipStartPosition(960.f, 540.f);
 	const nf::Vector2f SpaceshipStartSpeed(0.f, 0.f);
-	const float SpaceshipRadius = 48.f, SpaceshipMass = 1.f;
+	const float SpaceshipRadius = 48.f, SpaceshipMass = 2.f;
 	const std::string SpaceshipOnTextureName = "media/textures/spaceshipOn.png", 
 		SpaceshipOffTextureName = "media/textures/spaceshipOff.png", 
 		SpaceshipKilledTextureName = "media/textures/spaceshipKilled.png", 
@@ -28,5 +28,10 @@ namespace nf {
 	const float UFORadius = 64.f, UFOMass = 6.f, UFOBulletSpeed = 700.f, UFOBulletRadius = 12.f, UFOBulletMass = 1.f;
 	const float UFOMinSpawnSpeed = 100.f, UFOMaxSpawnSpeed = 200.f;
 
-	enum class EnemyType {Base, Asteroid, UFO};
+	const std::string BombTextureName = "media/textures/bomb.png";
+	const float BombRadius = 48.f, BombMass = 2.f;
+	const float BombMinSpawnSpeed = 100.f, BombMaxSpawnSpeed = 200.f;
+	const float BombPower = 500000.f;
+
+	enum class EnemyType {Base, Asteroid, UFO, Bomb};
 }

@@ -8,6 +8,7 @@
 #include "Enemy.hpp"
 #include "Asteroid.hpp"
 #include "UFO.hpp"
+#include "Bomb.hpp"
 
 namespace nf {
 	class Game {

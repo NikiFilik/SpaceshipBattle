@@ -52,6 +52,21 @@ namespace nf {
 		}
 	}
 
+	void Bomb::specialAbility(nf::Game& game) {
+		nf::Vector2f spaceshipDeltaPos(game.mSpaceship.getPosition() - mPosition);
+		float spaceshipDistance = spaceshipDeltaPos.length();
+		game.mSpaceship.setSpeed(game.mSpaceship.getSpeed() + spaceshipDeltaPos.normalized() * (BombPower / 
+			(spaceshipDistance * game.mSpaceship.getMass())));
+
+		auto iter = game.mEnemies.begin();
+		while (iter != game.mEnemies.end()) {
+			nf::Vector2f deltaPos((*iter)->getPosition() - mPosition);
+			float distance = deltaPos.length();
+			(*iter)->setSpeed((*iter)->getSpeed() + deltaPos.normalized() * (BombPower / (distance * (*iter)->getMass())));
+			++iter;
+		}
+	}
+
 	Game::Game(): mWindow(sf::VideoMode(WindowWidth, WindowHeight), "Spaceship Battle", sf::Style::Fullscreen)
 	{
 		mWindow.setVerticalSyncEnabled(true);
@@ -65,6 +80,7 @@ namespace nf {
 		mTextureHolder.load(MiniAsteroidTextureName);
 		mTextureHolder.load(UFOTextureName);
 		mTextureHolder.load(UFOBulletTextureName);
+		mTextureHolder.load(BombTextureName);
 
 		mBackground.setTexture(*mTextureHolder.get(BackgroundTextureName));
 
@@ -141,7 +157,7 @@ namespace nf {
 	}
 
 	void Game::enemySpawn() {
-		int type = nf::randIntFromRange(1, 2);
+		int type = nf::randIntFromRange(1, 3);
 		if (type == 1) {
 			bool spawned = false;
 			int attemptCounter = 0;
@@ -236,6 +252,53 @@ namespace nf {
 				++attemptCounter;
 			}
 		}
+		else if (type == 3) {
+			bool spawned = false;
+			int attemptCounter = 0;
+			while ((!spawned) && attemptCounter < 10) {
+				std::shared_ptr<nf::Enemy> bomb = std::make_shared<nf::Bomb>();
+				int spawnX, spawnY, side = nf::randIntFromRange(1, 4);
+				if (side == 1) {
+					spawnX = randIntFromRange(-BombRadius, WindowWidth + BombRadius);
+					spawnY = -BombRadius;
+				}
+				else if (side == 2) {
+					spawnX = WindowWidth + BombRadius;
+					spawnY = randIntFromRange(-BombRadius, WindowHeight + BombRadius);
+				}
+				else if (side == 3) {
+					spawnX = randIntFromRange(-BombRadius, WindowWidth + BombRadius);
+					spawnY = WindowHeight + BombRadius;
+				}
+				else if (side == 4) {
+					spawnX = -BombRadius;
+					spawnY = randIntFromRange(-BombRadius, WindowHeight + BombRadius);
+				}
+				nf::Vector2f bombSpawn(spawnX, spawnY);
+				nf::Vector2f bombSpeed(randIntFromRange(0, WindowWidth) - spawnX, randIntFromRange(0, WindowHeight) - spawnY);
+				bombSpeed.normalize();
+				bombSpeed *= float(randIntFromRange(BombMinSpawnSpeed, BombMaxSpawnSpeed));
+
+				bomb->setup(nf::EnemyType::Asteroid, bombSpawn, bombSpeed, BombRadius, BombMass,
+					mTextureHolder.get(BombTextureName), nf::randIntFromRange(-60, 60));
+
+				bool isColliding = false;
+
+				auto iter = mEnemies.begin();
+				while (iter != mEnemies.end()) {
+					if (bomb->isColliding(*(*iter))) {
+						isColliding = true;
+						break;
+					}
+					iter++;
+				}
+				if (!isColliding) {
+					mEnemies.push_back(bomb);
+					spawned = true;
+				}
+				++attemptCounter;
+			}
+		}
 	}
 
 	void Game::enemyAttack() {
@@ -257,7 +320,7 @@ namespace nf {
 			for (bInd = 0; bInd < mSpaceship.getBullets().size();) {
 				if ((mEnemies[eInd])->isColliding(mSpaceship.getBullets()[bInd])) {
 
-					if (mEnemies[eInd]->getEnemyType() == nf::EnemyType::Asteroid) {
+					if (mEnemies[eInd]->getEnemyType() == nf::EnemyType::Asteroid || mEnemies[eInd]->getEnemyType() == nf::EnemyType::Bomb) {
 						mEnemies[eInd]->specialAbility(*this);
 					}
 
@@ -279,7 +342,11 @@ namespace nf {
 
 		for (int i = 0; i < mEnemies.size(); ++i) {
 			if (mSpaceship.isColliding(*(mEnemies[i]))) {
+
+				// ON/OFF POSSIBILITY TO DIE
 				mSpaceship.setIsKilled(true);
+				// ON/OFF POSSIBILITY TO DIE
+
 				mSpaceship.resolveCollision(*(mEnemies[i]));
 			}
 			for (int j = i + 1; j < mEnemies.size(); ++j) {
@@ -310,11 +377,31 @@ namespace nf {
 			if ((*iter)->getEnemyType() == nf::EnemyType::UFO) {
 				auto UFOBulletIter = (*iter)->getBullets().begin();
 				while (UFOBulletIter != (*iter)->getBullets().end()) {
+					bool flag = true;
 					if (UFOBulletIter->isColliding(mSpaceship)) {
+
+						// ON/OFF POSSIBILITY TO DIE
 						mSpaceship.setIsKilled(true);
+						// ON/OFF POSSIBILITY TO DIE
+
 						UFOBulletIter = (*iter)->getBullets().erase(UFOBulletIter);
+						flag = false;
 					}
-					else {
+					if (flag) {
+						auto jter = mEnemies.begin();
+						while (jter != mEnemies.end()) {
+							if (iter != jter) {
+								if (UFOBulletIter->isColliding(*(*jter))) {
+									UFOBulletIter->resolveCollision(*(*jter));
+									UFOBulletIter = (*iter)->getBullets().erase(UFOBulletIter);
+									flag = false;
+									break;
+								}
+							}
+							jter++;
+						}
+					}
+					if(flag) {
 						UFOBulletIter++;
 					}
 				}
@@ -338,12 +425,12 @@ namespace nf {
 		mWindow.draw(mBackground);
 
 		for (int i = 0; i < mEnemies.size(); ++i) {
-			mWindow.draw(mEnemies[i]->getSprite());
 			if (mEnemies[i]->getEnemyType() == nf::EnemyType::UFO) {
 				for (int j = 0; j < mEnemies[i]->getBullets().size(); ++j) {
 					mWindow.draw(((mEnemies[i]->getBullets())[j]).getSprite());
 				}
 			}
+			mWindow.draw(mEnemies[i]->getSprite());
 		}
 
 		for (int i = 0; i < mSpaceship.getBullets().size(); ++i) {
