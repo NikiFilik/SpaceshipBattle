@@ -18,6 +18,10 @@ namespace nf {
 		nf::TextureHolder mTextureHolder;
 		std::vector<std::shared_ptr<nf::Enemy>> mEnemies;
 		sf::Sprite mBackground;
+
+		int mScore = 0;
+		sf::Font mFont;
+		sf::Text mTextScore, mLoserSign;
 	private:
 		void processInput();
 		void processPlayerInput(const sf::Keyboard::Key& key, const bool isPressed);

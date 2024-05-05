@@ -72,6 +72,10 @@ namespace nf {
 			boost(deltaTime);
 		}
 
+		if (std::abs(mSpeed.length()) > mMaxSpeed) {
+			mSpeed = mSpeed.normalized() * mMaxSpeed;
+		}
+
 		if ((sf::Vector2f(sf::Mouse::getPosition()) - mPosition).y <= 0.f) {
 			mSprite.setRotation(std::acos(nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition).normalized().x) * (-180.f / 3.14159f));
 		}
@@ -103,9 +107,6 @@ namespace nf {
 
 	void Spaceship::boost(const sf::Time& deltaTime) {
 		mSpeed += nf::Vector2f(sf::Vector2f(sf::Mouse::getPosition()) - mPosition) * mBoost * deltaTime.asSeconds();
-		if (std::abs(mSpeed.length()) > mMaxSpeed) {
-			mSpeed = mSpeed.normalized() * mMaxSpeed;
-		}
 	}
 
 	void Spaceship::shoot() {

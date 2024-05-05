@@ -84,6 +84,24 @@ namespace nf {
 
 		mBackground.setTexture(*mTextureHolder.get(BackgroundTextureName));
 
+
+
+		mFont.loadFromFile(FontFilename);
+
+		mTextScore.setFont(mFont);
+		mLoserSign.setFont(mFont);
+
+		mTextScore.setString("Score: " + std::to_string(mScore));
+
+		mTextScore.setCharacterSize(80);
+		mLoserSign.setCharacterSize(200);
+
+		mTextScore.setFillColor(sf::Color::White);
+		mLoserSign.setFillColor(sf::Color::White);
+
+		mTextScore.setPosition(20, -20);
+		//mLoserSign.setPosition(440, 400);
+
 		mSpaceship.setup(SpaceshipStartPosition, SpaceshipStartSpeed, SpaceshipRadius, SpaceshipMass, mTextureHolder.get(SpaceshipOffTextureName),
 			SpaceshipMaxSpeed, SpaceshipBoost, SpaceshipBulletSpeed, SpaceshipBoostKey, SpaceshipAttackButton, SpaceshipSpecialAbilityKey, mTextureHolder.get(SpaceshipBulletTextureName));
 	}
@@ -324,6 +342,21 @@ namespace nf {
 						mEnemies[eInd]->specialAbility(*this);
 					}
 
+					if (mEnemies[eInd]->getEnemyType() == nf::EnemyType::Base) {
+						mScore += 1;
+					}
+					if (mEnemies[eInd]->getEnemyType() == nf::EnemyType::Asteroid) {
+						mScore += 3;
+					}
+					if (mEnemies[eInd]->getEnemyType() == nf::EnemyType::UFO) {
+						mScore += 5;
+					}
+					if (mEnemies[eInd]->getEnemyType() == nf::EnemyType::Bomb) {
+						mScore += 5;
+					}
+					mTextScore.setString("Score: " + std::to_string(mScore));
+
+
 					auto iter = mEnemies.begin() + eInd;
 					iter = mEnemies.erase(iter);
 					auto iter2 = mSpaceship.getBullets().begin() + bInd;
@@ -438,6 +471,45 @@ namespace nf {
 		}
 
 		mWindow.draw(mSpaceship.getSprite());
+
+		mWindow.draw(mTextScore);
+		if (mSpaceship.getIsKilled() == true) {
+			//setlocale(LC_ALL, "Rus");
+			if (mScore == 0) {
+				mLoserSign.setString(L"Õ”¡ﬂ–¿");
+			}
+			else if (mScore <= 10) {
+				mLoserSign.setString(L"—œÀŒ’Œ¬¿À");
+			}
+			else if (mScore <= 20) {
+				mLoserSign.setString(L"Õ≈ —“¿–¿À—ﬂ");
+			}
+			else if (mScore <= 30) {
+				mLoserSign.setString(L"“–≈Õ»–”…—ﬂ");
+			}
+			else if (mScore <= 50) {
+				mLoserSign.setString(L"Õ≈œÀŒ’");
+			}
+			else if (mScore <= 100) {
+				mLoserSign.setString(L"ÕŒ–Ã");
+			}
+			else if (mScore <= 250) {
+				mLoserSign.setString(L"’Œ–Œÿ");
+			}
+			else if (mScore <= 500) {
+				mLoserSign.setString(L" –”“");
+			}
+			else if (mScore <= 1000) {
+				mLoserSign.setString(L"Ã≈√¿ –”“");
+			}
+			else {
+				mLoserSign.setString(L"À≈√≈Õƒ¿–≈Õ");
+			}
+			sf::FloatRect textRect = mLoserSign.getLocalBounds();
+			mLoserSign.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+			mLoserSign.setPosition(sf::Vector2f(WindowWidth / 2.0f, WindowHeight / 2.0f));
+			mWindow.draw(mLoserSign);
+		}
 
 		mWindow.display();
 	}

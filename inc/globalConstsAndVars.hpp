@@ -5,8 +5,9 @@
 
 namespace nf {
 	const int WindowWidth = 1920, WindowHeight = 1080;
-	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f), TimePerSpawn = sf::seconds(1.f), TimePerAttack = sf::seconds(2.f);
+	const sf::Time TimePerFrame = sf::seconds(1.f / 60.f), TimePerSpawn = sf::seconds(1.f), TimePerAttack = sf::seconds(1.5f);
 	const std::string BackgroundTextureName = "media/textures/background.png";
+	const std::string FontFilename = "media/fonts/PIXY.ttf";
 
 	const nf::Vector2f SpaceshipStartPosition(960.f, 540.f);
 	const nf::Vector2f SpaceshipStartSpeed(0.f, 0.f);
@@ -22,15 +23,15 @@ namespace nf {
 
 	const std::string AsteroidTextureName = "media/textures/asteroid.png", MiniAsteroidTextureName = "media/textures/miniAsteroid.png";
 	const float AsteroidRadius = 64.f, AsteroidMass = 3.f, MiniAsteroidRadius = 28.f, MiniAsteroidMass = 1.f;
-	const float AsteroidMinSpawnSpeed = 100.f, AsteroidMaxSpawnSpeed = 200.f;
+	const float AsteroidMinSpawnSpeed = 150.f, AsteroidMaxSpawnSpeed = 250.f;
 
 	const std::string UFOTextureName = "media/textures/ufo.png", UFOBulletTextureName = "media/textures/ufoBullet.png";
 	const float UFORadius = 64.f, UFOMass = 6.f, UFOBulletSpeed = 700.f, UFOBulletRadius = 12.f, UFOBulletMass = 1.f;
-	const float UFOMinSpawnSpeed = 100.f, UFOMaxSpawnSpeed = 200.f;
+	const float UFOMinSpawnSpeed = 150.f, UFOMaxSpawnSpeed = 250.f;
 
 	const std::string BombTextureName = "media/textures/bomb.png";
 	const float BombRadius = 48.f, BombMass = 2.f;
-	const float BombMinSpawnSpeed = 100.f, BombMaxSpawnSpeed = 200.f;
+	const float BombMinSpawnSpeed = 150.f, BombMaxSpawnSpeed = 250.f;
 	const float BombPower = 500000.f;
 
 	enum class EnemyType {Base, Asteroid, UFO, Bomb};
