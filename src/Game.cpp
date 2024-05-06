@@ -474,36 +474,35 @@ namespace nf {
 
 		mWindow.draw(mTextScore);
 		if (mSpaceship.getIsKilled() == true) {
-			//setlocale(LC_ALL, "Rus");
 			if (mScore == 0) {
-				mLoserSign.setString(L"Õ”¡ﬂ–¿");
+				mLoserSign.setString(L"√ç√ì√Å√ü√ê√Ä");
 			}
 			else if (mScore <= 10) {
-				mLoserSign.setString(L"—œÀŒ’Œ¬¿À");
+				mLoserSign.setString(L"√ë√è√ã√é√ï√é√Ç√Ä√ã");
 			}
 			else if (mScore <= 20) {
-				mLoserSign.setString(L"Õ≈ —“¿–¿À—ﬂ");
+				mLoserSign.setString(L"√ç√Ö √ë√í√Ä√ê√Ä√ã√ë√ü");
 			}
 			else if (mScore <= 30) {
-				mLoserSign.setString(L"“–≈Õ»–”…—ﬂ");
+				mLoserSign.setString(L"√í√ê√Ö√ç√à√ê√ì√â√ë√ü");
 			}
 			else if (mScore <= 50) {
-				mLoserSign.setString(L"Õ≈œÀŒ’");
+				mLoserSign.setString(L"√ç√Ö√è√ã√é√ï");
 			}
 			else if (mScore <= 100) {
-				mLoserSign.setString(L"ÕŒ–Ã");
+				mLoserSign.setString(L"√ç√é√ê√å");
 			}
 			else if (mScore <= 250) {
-				mLoserSign.setString(L"’Œ–Œÿ");
+				mLoserSign.setString(L"√ï√é√ê√é√ò");
 			}
 			else if (mScore <= 500) {
-				mLoserSign.setString(L" –”“");
+				mLoserSign.setString(L"√ä√ê√ì√í");
 			}
 			else if (mScore <= 1000) {
-				mLoserSign.setString(L"Ã≈√¿ –”“");
+				mLoserSign.setString(L"√å√Ö√É√Ä√ä√ê√ì√í");
 			}
 			else {
-				mLoserSign.setString(L"À≈√≈Õƒ¿–≈Õ");
+				mLoserSign.setString(L"√ã√Ö√É√Ö√ç√Ñ√Ä√ê√Ö√ç");
 			}
 			sf::FloatRect textRect = mLoserSign.getLocalBounds();
 			mLoserSign.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
